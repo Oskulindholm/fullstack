@@ -18,6 +18,18 @@ const App = () => {
       <button onClick={() => setBad(bad + 1)}>
         bad
       </button>
+      
+      <Statistics good={good} neutral={neutral} bad={bad} />
+    </div>
+  )
+}
+
+
+/// STATISTICS component renders all statistics related to feedback.
+const Statistics = ({good, neutral, bad}) => {
+
+  return (
+    <>
       <h2>Statistics</h2>
       <p>
         Good {good} <br/>
@@ -27,10 +39,9 @@ const App = () => {
         Average {(good - bad)/(good + neutral + bad)} <br/>
         Positive {good/(good + neutral + bad)*100} %
       </p>
-    </div>
+    </>
   )
 }
-
 
 
 export default App
