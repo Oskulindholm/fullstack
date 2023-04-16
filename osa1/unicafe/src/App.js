@@ -6,21 +6,32 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const handleGood = () => {setGood(good + 1)}
+  const handleNeutral = () => {setNeutral(neutral + 1)}
+  const handleBad = () => {setBad(bad + 1)}
+
   return (
     <div>
       <h2>Give feedback</h2>
-      <button onClick={() => setGood(good + 1)}>
-        good
-      </button>
-      <button onClick={() => setNeutral(neutral + 1)}>
-        neutral
-      </button>
-      <button onClick={() => setBad(bad + 1)}>
-        bad
-      </button>
+      <Button text={"Good"} handler={handleGood} />
+      <Button text={"Neutral"} handler={handleNeutral} />
+      <Button text={"Bad"} handler={handleBad} />
       
       <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
+  )
+}
+
+
+/// BUTTON component renders a button with a given functionality
+const Button = ({text, handler}) => {
+
+  return (
+    <>
+    <button onClick={handler}>
+        {text}
+      </button>
+    </>
   )
 }
 
@@ -36,18 +47,29 @@ const Statistics = ({good, neutral, bad}) => {
       </>
     )
   }
-  
+
   return (
     <>
       <h2>Statistics</h2>
       <p>
-        Good {good} <br/>
-        Neutral {neutral} <br/>
-        Bad {bad} <br/>
-        All {good + neutral + bad} <br/>
-        Average {(good - bad)/(good + neutral + bad)} <br/>
-        Positive {good/(good + neutral + bad)*100} %
+        <StatisticLine text={"Good"} value={good} />
+        <StatisticLine text={"Neutral"} value={neutral} />
+        <StatisticLine text={"Bad"} value={bad} />
+        <StatisticLine text={"All"} value={good + neutral + bad} />
+        <StatisticLine text={"Average"} value={(good - bad)/(good + neutral + bad)} />
+        <StatisticLine text={"Positive"} value={good/(good + neutral + bad)*100 + " %"} />
       </p>
+    </>
+  )
+}
+
+
+/// STATISTICLINE component renders a single statistical variable and its value
+const StatisticLine = ({text, value}) => {
+
+  return (
+    <>
+    {text} {value} <br/>
     </>
   )
 }
