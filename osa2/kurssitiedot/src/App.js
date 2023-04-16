@@ -36,6 +36,7 @@ const Course = ({course}) => {
     <>
       <Header title={course.name} />
       <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </>
   )
 }
@@ -76,10 +77,15 @@ const Part = ({part}) => {
 
 
 /// TOTAL component renders the total amount of exercises in the course page.
-const Total = ({course}) => {
+const Total = ({parts}) => {
+
+  const countSum = parts.reduce((sum, parts) => {
+    return sum + parts.exercises
+  }, 0)
+
   return (
     <>
-      <p>Number of exercises {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises}</p>
+      <p>Total number of exercises {countSum}</p>
     </>
   )
 }
