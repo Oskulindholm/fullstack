@@ -8,12 +8,13 @@ const App = () => {
     'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
    
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  const [mostPopular, setMostPopular] = useState(0)
 
   const nextAnecdote = () => {
     const next = Math.floor(Math.random() * anecdotes.length)
@@ -24,10 +25,14 @@ const App = () => {
     const copy = [...votes]
     copy[selected] += 1
     setVotes(copy)
+    const max = Math.max(...copy)
+    const i = copy.indexOf(max)
+    setMostPopular(i)
   }
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       {anecdotes[selected]} <br/>
       Has {votes[selected]} votes<br/>
       <button onClick={voteAnecdote}>
@@ -36,6 +41,10 @@ const App = () => {
       <button onClick={nextAnecdote}>
         Next anecdote
       </button>
+
+      <h2>Anecdote with the most votes</h2>
+      {anecdotes[mostPopular]}<br/>
+      Has {votes[mostPopular]} votes
     </div>
   )
 }
