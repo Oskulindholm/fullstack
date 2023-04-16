@@ -28,6 +28,15 @@ const App = () => {
 /// STATISTICS component renders all statistics related to feedback.
 const Statistics = ({good, neutral, bad}) => {
 
+  if (good + neutral + bad <= 0) {
+    return (
+      <>
+        <h2><b>Statistics</b></h2>
+        <p>No feedback given</p>
+      </>
+    )
+  }
+  
   return (
     <>
       <h2>Statistics</h2>
