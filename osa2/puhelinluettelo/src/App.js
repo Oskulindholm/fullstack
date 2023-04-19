@@ -48,27 +48,59 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      Filter shown with: <input onChange={handleFilter} />
+      <Filter handler={handleFilter} />
 
-      <h2>Add new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          Name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
+      <h3>Add new</h3>
+      <PersonForm submitHandler={addPerson} nameHandler={handleNameChange} numberHandler={handleNumberChange}
+      nameValue={newName} numberValue={newNumber} />
 
-      <h2>Numbers</h2>
-        {persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
-          .map(p => <p key={p.name}> {p.name} {p.number}</p>)}
+      <h3>Numbers</h3>
+      <PersonList persons={persons} filter={filter} />
     </div>
   )
 
 }
 
+
+/// FILTER component renders the filter input field for the phonebook.
+const Filter = ({handler}) => {
+
+  return (
+    <>
+    Filter shown with: <input onChange={handler} />
+    </>
+  )
+}
+
+
+/// PERSONFORM component renders the form with input fields to add new persons to the phonebook.
+const PersonForm = ({submitHandler, nameHandler, numberHandler, nameValue, numberValue}) => {
+
+  return (
+    <>
+    <form onSubmit={submitHandler}>
+        <div>
+          Name: <input value={nameValue} onChange={nameHandler}/>
+        </div>
+        <div>
+          Number: <input value={numberValue} onChange={numberHandler}/>
+        </div>
+        <div>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+    </>
+  )
+}
+
+/// PERSONLIST component renders the contents of the phonebook.
+const PersonList = ({persons, filter}) => {
+
+  return (
+    <>
+    {persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
+      .map(p => <p key={p.name}> {p.name} {p.number}</p>)}
+    </>
+  )
+}
 export default App
