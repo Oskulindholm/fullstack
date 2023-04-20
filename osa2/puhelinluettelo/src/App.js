@@ -13,7 +13,7 @@ const App = () => {
     personService
       .getAll()
       .then(res => {
-        setPersons(res.data)
+        setPersons(res)
       })
   }, [])
 
@@ -35,13 +35,10 @@ const App = () => {
     personService
     .create(newPerson)
     .then(res => {
-      console.log(res)
-      setPersons(persons.concat(res.data))
+      setPersons(persons.concat(res))
       setNewName('')
       setNewNumber('')
     })
-
-    console.log(newPerson.name + ' added')
   }
 
   const handleNameChange = (event) => {
@@ -56,6 +53,18 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const handleErase = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .erase(person)
+        .then(() => {
+          personService
+          .getAll()
+          .then(updatedPhonebook => {setPersons(updatedPhonebook)})
+        })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -66,7 +75,7 @@ const App = () => {
       nameValue={newName} numberValue={newNumber} />
 
       <h3>Numbers</h3>
-      <PersonList persons={persons} filter={filter} />
+      <PersonList persons={persons} filter={filter} handler={handleErase} />
     </div>
   )
 
@@ -105,12 +114,12 @@ const PersonForm = ({submitHandler, nameHandler, numberHandler, nameValue, numbe
 }
 
 /// PERSONLIST component renders the contents of the phonebook.
-const PersonList = ({persons, filter}) => {
+const PersonList = ({persons, filter, handler}) => {
 
   return (
     <>
     {persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
-      .map(p => <p key={p.name}> {p.name} {p.number}</p>)}
+      .map(p => <p key={p.name}> {p.name} {p.number} <button onClick={() => handler(p)} >Delete</button> </p>)}
     </>
   )
 }
