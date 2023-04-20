@@ -16,20 +16,24 @@ const App = () => {
 
   const handleFilter = (event) => {
     setFilter(event.target.value.trim())
-}
+  }
+
+  const showCountry = (name) => {
+    setFilter(name)
+  }
 
 
   return (
     <div>
       Find countries: <input onChange={handleFilter} /> <br/>
 
-      <CountryList filter={filter} countries={countries} />
+      <CountryList filter={filter} countries={countries} handler={showCountry} />
     </div>
   )
 }
 
 /// COUNTRYLIST component renders the list of all countries that match the filter.
-const CountryList = ({filter, countries}) => {
+const CountryList = ({filter, countries, handler}) => {
 
   const matches = countries.filter(c => c.name.common.toLowerCase().includes(filter.toLowerCase()))
 
@@ -42,7 +46,7 @@ const CountryList = ({filter, countries}) => {
     } else if (matches.length > 1) {
         return (
             <>
-              {matches.map(c => <p key={c.name.common}> {c.name.common} </p>)}
+              {matches.map(c => <p key={c.name.common}> {c.name.common} <button onClick={() => handler(c.name.common)}>Show</button></p>)}
             </>
         )
     } else if (matches.length == 1 ) {
