@@ -8,6 +8,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState([])
 
   useEffect(() => {
     personService
@@ -36,6 +37,10 @@ const App = () => {
             .then(updatedPersons => {
               setPersons(updatedPersons)
             })
+            setNotification([`${personDouble.name}'s number updated successfully`, "success"])
+              setTimeout(() => {
+            setNotification(null)
+            }, 3000)
           })
           setNewName('')
           setNewNumber('')
@@ -52,6 +57,10 @@ const App = () => {
     .create(newPerson)
     .then(res => {
       setPersons(persons.concat(res))
+      setNotification([`Added ${newPerson.name}`, "success"])
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
       setNewName('')
       setNewNumber('')
     })
@@ -81,12 +90,18 @@ const App = () => {
           personService
           .getAll()
           .then(updatedPhonebook => {setPersons(updatedPhonebook)})
+        setNotification([`${person.name} deleted successfully`, "success"])
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
         })
     }
   }
 
   return (
     <div>
+      <Notification msg={notification} />
+
       <h2>Phonebook</h2>
       <Filter handler={handleFilter} />
 
@@ -99,6 +114,26 @@ const App = () => {
     </div>
   )
 
+}
+
+/// NOTIFICATION component renders a notification on screen.
+const Notification = ({msg}) => {
+  if (msg === null) {
+    return null
+  }
+
+  const msgContent = msg[0]
+  const msgClass = msg[1]
+
+  
+  return (
+    <div className={msgClass} >
+      {msgContent}
+    </div>
+  )
+  
+
+  
 }
 
 
