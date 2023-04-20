@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const App = () => {
 
+  const api_key = process.env.REACT_APP_WEATHER_API_KEY
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
 
@@ -22,18 +23,17 @@ const App = () => {
     setFilter(name)
   }
 
-
   return (
     <div>
       Find countries: <input onChange={handleFilter} /> <br/>
 
-      <CountryList filter={filter} countries={countries} handler={showCountry} />
+      <CountryList filter={filter} countries={countries} handler={showCountry} api_key={api_key} />
     </div>
   )
 }
 
 /// COUNTRYLIST component renders the list of all countries that match the filter.
-const CountryList = ({filter, countries, handler}) => {
+const CountryList = ({filter, countries, handler, api_key}) => {
 
   const matches = countries.filter(c => c.name.common.toLowerCase().includes(filter.toLowerCase()))
 
@@ -52,7 +52,7 @@ const CountryList = ({filter, countries, handler}) => {
     } else if (matches.length == 1 ) {
         return (
             <>
-              <Country country={matches[0]} />
+              <Country country={matches[0]} api_key={api_key} />
             </>
         )
     } else {
@@ -64,12 +64,25 @@ const CountryList = ({filter, countries, handler}) => {
 
 
 /// COUNTRY component displays the basic information related to a single country
-const Country = ({country}) => {
+const Country = ({country, api_key}) => {
 
     const languages = Object.keys(country.languages).map(key => {return country.languages[key]})
     const lat = country.capitalInfo.latlng[0]
     const lon = country.capitalInfo.latlng[1]
+    const [wind, setWind] = useState('')
+    const [temperature, setTemperature] = useState('')
+    const [weatherIcon, setWeatherIcon] = useState('')
 
+    useEffect(() => {
+        axios
+          .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${api_key}`)
+          .then(res => {
+              setTemperature(res.data.main.temp)
+              setWind(res.data.wind.speed)
+              setWeatherIcon(`https://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`)
+          })
+      }, [])    
+  
 
     return (
       <>
@@ -85,6 +98,13 @@ const Country = ({country}) => {
         </ul>
         
         <img src={country.flags.png} />
+        
+        <h3>Weather in {country.capital}</h3>
+        <p>
+          Temperature: {temperature} °C <br/>
+          <img src={weatherIcon} />  <br/>
+          Wind: {wind} m/s
+        </p> 
       </>
     )
 }
