@@ -42,6 +42,13 @@ const App = () => {
             setNotification(null)
             }, 3000)
           })
+          .catch(error => {
+            setNotification([`Information on ${personDouble.name} has already been removed from server`, "error"])
+              setTimeout(() => {
+            setNotification(null)
+            }, 3000)
+            setPersons(persons.filter(p => p.id !== personDouble.id))
+          })
           setNewName('')
           setNewNumber('')
       }
