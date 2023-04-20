@@ -1,4 +1,5 @@
-import axios from 'axios'
+import personService from './services/Persons'
+
 
 import React, { useEffect, useState } from 'react'
 
@@ -9,8 +10,8 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(res => {
         setPersons(res.data)
       })
@@ -31,10 +32,11 @@ const App = () => {
       number: number
     }
 
-    axios
-    .post('http://localhost:3001/persons', newPerson)
+    personService
+    .create(newPerson)
     .then(res => {
-      setPersons(persons.concat(newPerson))
+      console.log(res)
+      setPersons(persons.concat(res.data))
       setNewName('')
       setNewNumber('')
     })
@@ -108,7 +110,7 @@ const PersonList = ({persons, filter}) => {
   return (
     <>
     {persons.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
-      .map(p => <p key={p.id}> {p.name} {p.number}</p>)}
+      .map(p => <p key={p.name}> {p.name} {p.number}</p>)}
     </>
   )
 }
