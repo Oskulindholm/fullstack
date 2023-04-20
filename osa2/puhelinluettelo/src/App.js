@@ -22,8 +22,24 @@ const App = () => {
     const name = newName.trim()
     const number = newNumber.trim()
 
-    if (persons.find(p => p.name.trim().toLowerCase() === newName.trim().toLowerCase())) {
-      window.alert(`${name} is already added to the phonebook.`)
+    const personDouble = findName()
+    
+    if (personDouble !== undefined) {
+      if (window.confirm(`${name} is already added to the phonebook.\nWould you like to replace the old number ?`)) {
+        personDouble.number = newNumber
+
+        personService
+          .update(personDouble)
+          .then(() => {
+            personService
+            .getAll()
+            .then(updatedPersons => {
+              setPersons(updatedPersons)
+            })
+          })
+          setNewName('')
+          setNewNumber('')
+      }
       return
     }
 
@@ -39,6 +55,10 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     })
+  }
+
+  const findName = () => {
+    return (persons.find(p => p.name.toLowerCase().trim() === newName.toLowerCase().trim()))
   }
 
   const handleNameChange = (event) => {

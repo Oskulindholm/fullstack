@@ -11,12 +11,19 @@ const getAll = () => {
     return req.then(res => res.data)
   }
 
+  const update = p => {
+    const req = axios.put(`${baseUrl}/${p.id}`, p)
+    return req.then(res => res.data)
+  }
+
   const erase = person => {
-    return axios.delete(`${baseUrl}/${person.id}`, person.id)
+    const req = axios.delete(`${baseUrl}/${person.id}`, person.id)
+    return req.then(res => res.data)
   }
 
   export default {
     getAll: getAll,
     create: create,
+    update: update,
     erase:  erase
   }
