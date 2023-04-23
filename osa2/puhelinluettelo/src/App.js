@@ -185,4 +185,4 @@ const PersonList = ({persons, filter, handler}) => {
     </>
   )
 }
-export default App
+export default App;
