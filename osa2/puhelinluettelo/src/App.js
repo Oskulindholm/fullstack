@@ -71,6 +71,13 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     })
+    .catch(error => {
+      console.log(error.response)
+      setNotification([`${error.response.data.error}`, "error"])
+        setTimeout(() => {
+          setNotification(null)
+      }, 3000)
+    })
   }
 
   const findName = () => {
