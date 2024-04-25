@@ -12,7 +12,7 @@ const getAll = async() => {
     return res.data
 }
 
-const postBlog = async newBlog => {
+const addBlog = async newBlog => {
     const config = {
         headers: { Authorization: token}
     }
@@ -28,6 +28,6 @@ const deleteBlog = async blog => {
 export default {
     setToken,
     getAll,
-    postBlog,
+    addBlog,
     deleteBlog
 }
