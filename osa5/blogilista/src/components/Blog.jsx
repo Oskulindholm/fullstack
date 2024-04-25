@@ -1,7 +1,7 @@
 const Blog = ( {blog} ) => {
     return (
       <>
-        <p> {blog.title} {blog.author} </p>
+        <p> {blog.title} - {blog.author} </p>
       </>
     )
 }

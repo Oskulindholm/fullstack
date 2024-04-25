@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
+  const [notification, setNotification] = useState([])
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -27,6 +29,13 @@ const App = () => {
     }
   }, [])
 
+  const notify = msg => {
+    setNotification(msg)
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+  }
+
   const handleLogin = async (e) => {
     e.preventDefault()
     console.log(username, 'logging in')
@@ -40,9 +49,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (ex) {
-      /*setErrorMessage('')
-      setTimeout.....
-      */
+      notify([`${ex.response.data.error}`, 'error'])
     }
   }
 
@@ -70,8 +77,10 @@ const App = () => {
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')
+      notify([`A new blog "${addedBlog.title}" added to bloglist.`, 'success'])
+ 
     } catch(ex) {
-      console.log(ex)
+      notify([`Blog could not be added to bloglist. Required information missing.`, 'error'])
     }
   }
 
@@ -126,6 +135,8 @@ const App = () => {
 
   return (
     <div>
+      <Notification msg={notification} />
+
       {!user && loginForm()}
       {user && blogForm()}
     </div>
