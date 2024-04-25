@@ -72,7 +72,7 @@ const App = () => {
       setNewNumber('')
     })
     .catch(error => {
-      console.log(error.response)
+      console.log(error.response.data)
       setNotification([`${error.response.data.error}`, "error"])
         setTimeout(() => {
           setNotification(null)

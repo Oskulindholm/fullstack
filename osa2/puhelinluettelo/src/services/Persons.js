@@ -21,9 +21,9 @@ const getAll = () => {
     return req.then(res => res.data)
   }
 
-  export default {
-    getAll: getAll,
-    create: create,
-    update: update,
-    erase:  erase
-  }
+export default {
+  getAll: getAll,
+  create: create,
+  update: update,
+  erase:  erase
+}
