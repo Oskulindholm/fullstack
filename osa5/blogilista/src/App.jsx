@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +15,7 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
+  const blogFormRef = useRef()
 
   
   useEffect(() => {
@@ -78,7 +81,7 @@ const App = () => {
       setNewAuthor('')
       setNewUrl('')
       notify([`A new blog "${addedBlog.title}" added to bloglist.`, 'success'])
- 
+      blogFormRef.current.toggleVisibility()
     } catch(ex) {
       notify([`Blog could not be added to bloglist. Required information missing.`, 'error'])
     }
@@ -87,6 +90,9 @@ const App = () => {
   const loginForm = () => (
     <>
       <h1> Login to application </h1>
+      
+      <Notification msg={notification} />
+
       <form onSubmit={handleLogin}>
       <div>
         Username: <input type="text" value={username} name="Username"
@@ -105,27 +111,19 @@ const App = () => {
     <>
       <h1> Bloglist </h1>
 
+      <Notification msg={notification} />
+
       <p>
         <b>{user.name} logged in </b>
         <button type="submit" onClick={handleLogout}>Logout</button>
       </p>
 
-      <h2> Add a new blog </h2>
-      <form onSubmit={handleNewBlog}>
-        <div>
-          Title: <input type="text" value={newTitle} name="Title"
-          onChange={({ target }) => setNewTitle(target.value)} />
-        </div>
-        <div>
-          Author: <input type="text" value={newAuthor} name="Author"
-          onChange={({ target }) => setNewAuthor(target.value)} />
-        </div>
-        <div>
-          URL: <input type="text" value={newUrl} name="url"
-          onChange={({ target }) => setNewUrl(target.value)} />
-        </div>
-        <button type="submit" onClick={handleNewBlog}>Add</button>
-      </form>
+      <Togglable buttonLabel={'Add blog'} ref={blogFormRef}>
+        <BlogForm handleSubmit={handleNewBlog} title={newTitle} author={newAuthor}
+          url={newUrl}handleTitle={({ target }) => setNewTitle(target.value)}
+          handleAuthor={({ target }) => setNewAuthor(target.value)}
+          handleUrl={({ target }) => setNewUrl(target.value)} />
+      </Togglable>
 
       {blogs.map(b => <Blog key={b.id} blog={b} />)}
     </>
@@ -135,8 +133,6 @@ const App = () => {
 
   return (
     <div>
-      <Notification msg={notification} />
-
       {!user && loginForm()}
       {user && blogForm()}
     </div>
