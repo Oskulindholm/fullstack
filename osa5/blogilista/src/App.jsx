@@ -12,11 +12,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-  const blogFormRef = useRef()
 
+  const blogFormRef = useRef()
   
   useEffect(() => {
     blogService.getAll()
@@ -63,23 +60,14 @@ const App = () => {
     setUser(null)
   }
 
-  const handleNewBlog = async (e) => {
-    e.preventDefault()
-    const title = newTitle.trim()
-    const author = newAuthor.trim()
-    const url = newUrl.trim()
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const handleNewBlog = async (newBlog) => {
+    newBlog.title = newBlog.title.trim()
+    newBlog.author = newBlog.author.trim()
+    newBlog.url = newBlog.url.trim()
 
     try {
       const addedBlog = await blogService.addBlog(newBlog)
       setBlogs(blogs.concat(addedBlog))
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
       notify([`A new blog "${addedBlog.title}" added to bloglist.`, 'success'])
       blogFormRef.current.toggleVisibility()
     } catch(ex) {
@@ -119,10 +107,7 @@ const App = () => {
       </p>
 
       <Togglable buttonLabel={'Add blog'} ref={blogFormRef}>
-        <BlogForm handleSubmit={handleNewBlog} title={newTitle} author={newAuthor}
-          url={newUrl}handleTitle={({ target }) => setNewTitle(target.value)}
-          handleAuthor={({ target }) => setNewAuthor(target.value)}
-          handleUrl={({ target }) => setNewUrl(target.value)} />
+        <BlogForm createBlog={handleNewBlog} />
       </Togglable>
 
       {blogs.map(b => <Blog key={b.id} blog={b} />)}
