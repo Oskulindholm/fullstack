@@ -87,6 +87,13 @@ const App = () => {
     setBlogs(blogs.map(b => b.id === likedBlog.id ? updatedBlog : b))
   }
 
+  const handleRemove = async (deletedBlog) => {
+    if (window.confirm(`Remove blog "${deletedBlog.title}" by ${deletedBlog.author} ?`, deletedBlog.title, deletedBlog.author))
+    {
+      await blogService.deleteBlog(deletedBlog)
+      setBlogs(blogs.filter(b => b.id !== deletedBlog.id))
+    } 
+  }
 
   const loginForm = () => (
     <>
@@ -125,7 +132,7 @@ const App = () => {
 
       {blogs.sort((a, b) => b.likes - a.likes).map(b => 
         <div key={b.id}>
-          <Blog key={b.title} blog={b} handleLike={handleLike}/> <br/>
+          <Blog key={b.title} blog={b} user={user} handleLike={handleLike} handleRemove={handleRemove}/> <br/>
         </div>
       )}
     </>
