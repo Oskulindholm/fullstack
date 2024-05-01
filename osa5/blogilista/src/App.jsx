@@ -14,7 +14,7 @@ const App = () => {
   const [password, setPassword] = useState('')
 
   const blogFormRef = useRef()
-  
+
   useEffect(() => {
     blogService.getAll()
       .then(blogs => setBlogs(blogs))
@@ -71,7 +71,7 @@ const App = () => {
       notify([`A new blog "${addedBlog.title}" added to bloglist.`, 'success'])
       blogFormRef.current.toggleVisibility()
     } catch(ex) {
-      notify([`Blog could not be added to bloglist. Required information missing.`, 'error'])
+      notify(['Blog could not be added to bloglist. Required information missing.', 'error'])
     }
   }
 
@@ -92,25 +92,25 @@ const App = () => {
     {
       await blogService.deleteBlog(deletedBlog)
       setBlogs(blogs.filter(b => b.id !== deletedBlog.id))
-    } 
+    }
   }
 
   const loginForm = () => (
     <>
       <h1> Login to application </h1>
-      
+
       <Notification msg={notification} />
 
       <form onSubmit={handleLogin}>
-      <div>
+        <div>
         Username: <input type="text" value={username} name="Username"
-        onChange={({ target }) => setUsername(target.value)} />
-      </div>
-      <div>
+            onChange={({ target }) => setUsername(target.value)} />
+        </div>
+        <div>
         Password: <input type="password" value={password} name="Password"
-        onChange={({ target }) => setPassword(target.value)} />
-      </div>
-      <button type="submit">Login</button>
+            onChange={({ target }) => setPassword(target.value)} />
+        </div>
+        <button type="submit">Login</button>
       </form>
     </>
   )
@@ -130,14 +130,14 @@ const App = () => {
         <BlogForm createBlog={handleNewBlog} />
       </Togglable> <br/>
 
-      {blogs.sort((a, b) => b.likes - a.likes).map(b => 
+      {blogs.sort((a, b) => b.likes - a.likes).map(b =>
         <div key={b.id}>
           <Blog key={b.title} blog={b} user={user} handleLike={handleLike} handleRemove={handleRemove}/> <br/>
         </div>
       )}
     </>
   )
-  
+
 
 
   return (
