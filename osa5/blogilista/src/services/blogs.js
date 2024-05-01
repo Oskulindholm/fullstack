@@ -20,14 +20,20 @@ const addBlog = async newBlog => {
     return res.data
 }
 
-const deleteBlog = async blog => {
-    const res = await axios.delete(`${baseUrl}/${blog.id}`, blog.id)
+const updateBlog = async blog => {
+    const res = await axios.put(`${baseUrl}/${blog.id}`, blog)
     return res.data
+}
+
+const deleteBlog = async blog => {
+    const req = await axios.delete(`${baseUrl}/${blog.id}`, blog.id)
+    return req.then(res => res.data)
 }
 
 export default {
     setToken,
     getAll,
     addBlog,
+    updateBlog,
     deleteBlog
 }
