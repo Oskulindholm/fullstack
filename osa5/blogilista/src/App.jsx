@@ -81,7 +81,9 @@ const App = () => {
       likes: likedBlog.likes + 1,
       user: likedBlog.user.id
     }
+    const u = likedBlog.user
     await blogService.updateBlog(updatedBlog)
+    updatedBlog.user = u
     setBlogs(blogs.map(b => b.id === likedBlog.id ? updatedBlog : b))
   }
 
